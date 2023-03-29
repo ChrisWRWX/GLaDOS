@@ -12,7 +12,7 @@ https://platform.openai.com/account/
 
 Used for chatGPT.
 
-Generate and API Key and save as the environment variable `OPENAI_API_KEY`
+Generate an API Key and save as the environment variable `OPENAI_API_KEY`
 
 ### Picovoice
 https://console.picovoice.ai/
