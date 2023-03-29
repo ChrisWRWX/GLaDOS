@@ -1,0 +1,11 @@
+torch
+phonemizer
+inflect
+unidecode
+scipy
+openai
+openai-whisper
+numpy
+pvporcupine
+pvcobra
+pvrecorder
