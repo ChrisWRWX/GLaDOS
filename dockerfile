@@ -9,9 +9,9 @@ COPY api/requirements.txt /tmp/
 COPY api/ /api/
 
 RUN python -m pip install --upgrade pip && \
-    pip install -r /tmp/requirements.txt
-    
+    pip install --no-cache-dir -r /tmp/requirements.txt
+
 RUN apt-get update 
-RUN apt-get install –y nginx 
+RUN apt-get install -y nginx 
 
 RUN python /api/setup.py
