@@ -149,16 +149,8 @@ const AudioRecorder = (props) => {
 
   return (
     <>
-      <div>
-        <button 
-          style={{textAlign: 'center'}}
-          onClick={() => {props.socket.send('start a conversation')}}
-        >
-          Start a conversation
-        </button>
-      </div>
       <div style={{marginTop: '150px', textAlign: 'center'}}>
-        <canvas ref={canvasRef} width={500} height={100}></canvas>
+        <canvas ref={canvasRef} width={200} height={100}></canvas>
         <div style={{marginTop:'100px'}}>
           <button
             style={{
@@ -190,6 +182,14 @@ const AudioRecorder = (props) => {
         </div>
         <div style={{display: 'none'}}>
           <AudioAnalyser {...audioProps} />
+        </div>
+        <div>
+          <button 
+            style={{textAlign: 'center', marginTop: '50px'}}
+            onClick={() => {props.socket.send('start a conversation')}}
+          >
+            Start a conversation
+          </button>
         </div>
       </div>
     </>
