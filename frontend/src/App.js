@@ -12,12 +12,17 @@ new_uri += "//" + window.location.host;
 new_uri += window.location.pathname + "api";
 
 
+window.oncontextmenu = function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+};
 
 function App() {
   const [socket] = React.useState(new WebSocket(new_uri))
 
   return (
-    <div>
+    <div class="no_highlights">
       <AudioRecorder socket={socket} />
     </div>
   );
