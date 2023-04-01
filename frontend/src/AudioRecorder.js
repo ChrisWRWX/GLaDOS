@@ -5,24 +5,18 @@ import AudioAnalyser from "react-audio-analyser";
 
 const AudioRecorder = (props) => {
   const [status, setStatus] = React.useState();
-  const [audioSrc, setAudioSrc] = React.useState();
+  const [audioSrc] = React.useState();
   const [audioQueue, setAudioQueue] = React.useState([]);
   const qRef = React.useRef('');
   const [micImage, setMicImage] = React.useState("./mic-32-black.png")
   const audioType = "audio/wav"
   const canvasRef = React.useRef(null);
-  // const [audioContext, setAudioContext] = React.useState(new AudioContext());
-  // const [audioSource, setAudioSource] = React.useState(null);
   const [analyserNode, setAnalyserNode] = React.useState(null);
 
 
   React.useEffect(() => {
     qRef.current = audioQueue
   }, [audioQueue])
-
-  React.useEffect(() => {
-    queueAudio();
-  }, [])
 
   const audioProps = {
     width: 200,
@@ -122,20 +116,7 @@ const AudioRecorder = (props) => {
     }
   }, [canvasRef, analyserNode]);
 
-  const queueAudio = async () => {
-    if (qRef.current.length > 0){
-      const tempQueue = qRef.current.slice();
-      const firstElement = tempQueue.shift();
-      setAudioQueue(tempQueue)
-      // const audio = new Audio(URL.createObjectURL(firstElement));
-      // await playAudio(audio)
-      await playAudio(window.URL.createObjectURL(firstElement))
-      setTimeout(() => queueAudio(), 100)
-    }
-    else {
-      setTimeout(() => queueAudio(), 100);
-    }
-  }
+  
 
   props.socket.onmessage = (e) => {    
     const blob = e.data.slice(0, e.data.size, "audio/wav")
@@ -148,6 +129,23 @@ const AudioRecorder = (props) => {
     catch {
     }
   }
+
+  React.useEffect(() => {
+    const queueAudio = async () => {
+      if (qRef.current.length > 0){
+        const tempQueue = qRef.current.slice();
+        const firstElement = tempQueue.shift();
+        setAudioQueue(tempQueue)
+        await playAudio(window.URL.createObjectURL(firstElement))
+        setTimeout(() => queueAudio(), 100)
+      }
+      else {
+        setTimeout(() => queueAudio(), 100);
+      }
+    }
+    
+    queueAudio();
+  }, [])
 
   return (
     <>
@@ -187,7 +185,7 @@ const AudioRecorder = (props) => {
               setMicImage("./mic-32-black.png")
             }}
           >
-            <img src={micImage} />
+            <img src={micImage} alt="mic"/>
           </button>
         </div>
         <div style={{display: 'none'}}>
