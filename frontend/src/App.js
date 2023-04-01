@@ -2,7 +2,6 @@ import React from 'react';
 import AudioRecorder from "./AudioRecorder.js";
 
 
-const loc = window.location;
 var new_uri;
 if (window.location.protocol === "https:") {
     new_uri = "wss:";
