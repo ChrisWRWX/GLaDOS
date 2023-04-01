@@ -6,6 +6,4 @@ scipy
 openai
 openai-whisper
 numpy
-pvporcupine
-pvcobra
-pvrecorder
+websockets
