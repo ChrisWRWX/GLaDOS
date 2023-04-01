@@ -11,9 +11,9 @@ RUN python -m pip install --upgrade pip && \
 RUN apt-get update 
 RUN apt-get install -y nginx espeak
 
-COPY nginx.conf /etc/nginx/conf.d/
+COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY frontend/build/ /usr/share/nginx/html/
 
 RUN python /api/setup.py
 
-CMD nginx -g daemon off; cd /api && python app.py
+CMD nginx; cd /api && python app.py
