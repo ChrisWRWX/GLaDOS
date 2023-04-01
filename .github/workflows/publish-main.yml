@@ -23,7 +23,8 @@ jobs:
         with:
           node-version: 16.x
           cache: 'npm'
-      - run: cd frontend && npm run build --if-present
+      - run: npm run build --if-present
+        working-directory: frontend
       # - run: npm test
 
       # Login against a Docker registry except on PR
