@@ -23,9 +23,8 @@ jobs:
         with:
           node-version: 16.x
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
       - run: npm run build --if-present
-        working-directory: frontend
-      # - run: npm test
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
