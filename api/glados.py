@@ -35,6 +35,9 @@ def tts(text):
     """
     Convert text to speech
     """
+    # Fix pronunciation
+    text = text.replace('GLaDOS', 'Glados')
+
     # Tokenize, clean and phonemize input text
     x = prepare_text(text).to('cpu')
 
@@ -57,12 +60,3 @@ def tts(text):
         write(byte_io, 22050, audio)
         
         return byte_io
-
-
-def speak(audio, text):
-    """
-    Print to terminal and play audio
-    """
-    print(text.strip())
-    # Play audio file
-    winsound.PlaySound(audio.read(), winsound.SND_MEMORY)
