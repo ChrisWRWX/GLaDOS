@@ -7,6 +7,7 @@ import logging
 logging.getLogger().setLevel(logging.INFO)
 
 try:
+.   import winsounds
     import os
     os.environ['PHONEMIZER_ESPEAK_LIBRARY'] = 'C:\Program Files\eSpeak NG\libespeak-ng.dll'
     os.environ['PHONEMIZER_ESPEAK_PATH'] = 'C:\Program Files\eSpeak NG\espeak-ng.exe'
