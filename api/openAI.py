@@ -3,6 +3,9 @@ import whisper as _whisper
 import numpy as _np
 from scipy.io import wavfile as _wavfile
 from scipy import signal as _signal
+import logging
+
+logging.getLogger().setLevel(logging.INFO)
 
 
 class chatGPT:
@@ -39,7 +42,9 @@ class chatGPT:
 
 class whisper:
     def __init__(self):
+        logging.info('Loading whisper model - small.en')
         self.whisper = _whisper.load_model("small.en")
+        logging.info('Whisper model loaded - small.en')
 
     def transcribe(self, audio):
         """
@@ -55,4 +60,5 @@ class whisper:
 
         audio_np = _np.array(clip, dtype=_np.float32) / 16000
         result = self.whisper.transcribe(audio_np, fp16=False)
+        logging.info(f"Prompt: {result['text'].strip()}")
         return result['text'].strip()
