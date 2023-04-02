@@ -65,7 +65,9 @@ async def handler(websocket):
 
         except websockets.ConnectionClosedOK:
             break
-
+        
+        await asyncio.sleep(0)
+        
     try:
         await websocket.wait_closed()
     finally:
