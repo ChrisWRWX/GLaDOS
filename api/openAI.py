@@ -1,8 +1,8 @@
 import openai as _openai
 import whisper as _whisper
 import numpy as _np
-from scipy.io import wavfile
-import scipy.signal as sps
+from scipy.io import wavfile as _wavfile
+from scipy import signal as _signal
 
 
 class chatGPT:
@@ -41,18 +41,17 @@ class whisper:
     def __init__(self):
         self.whisper = _whisper.load_model("small.en")
 
-
     def transcribe(self, audio):
         """
         Transcribe audio to text using whisper
         """
         new_rate = 16000
         # Read file
-        sample_rate, clip = wavfile.read(audio)
+        sample_rate, clip = _wavfile.read(audio)
             
         # Resample data
         number_of_samples = round(len(clip) * float(new_rate) / sample_rate)
-        clip = sps.resample(clip, number_of_samples)
+        clip = _signal.resample(clip, number_of_samples)
 
         audio_np = _np.array(clip, dtype=_np.float32) / 16000
         result = self.whisper.transcribe(audio_np, fp16=False)
