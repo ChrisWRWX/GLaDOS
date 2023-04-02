@@ -1,35 +1,32 @@
 import io
 import torch
-from scipy.io.wavfile import write
+from scipy.io import wavfile as _wavfile
 from utils.tools import prepare_text
+import logging
+
+logging.getLogger().setLevel(logging.INFO)
 
 try:
-    import winsound
     import os
     os.environ['PHONEMIZER_ESPEAK_LIBRARY'] = 'C:\Program Files\eSpeak NG\libespeak-ng.dll'
     os.environ['PHONEMIZER_ESPEAK_PATH'] = 'C:\Program Files\eSpeak NG\espeak-ng.exe'
 except ImportError:
     from subprocess import call
 
-print("Initializing TTS Engine...")
-
-# Select the device
-if torch.is_vulkan_available():
-    device = 'vulkan'
-if torch.cuda.is_available():
-    device = 'cuda'
-else:
-    device = 'cpu'
+logging.info("Initializing TTS Engine...")
 
 # Load models
 glados = torch.jit.load('models/glados.pt')
-vocoder = torch.jit.load('models/vocoder-gpu.pt', map_location=device)
+vocoder = torch.jit.load('models/vocoder-cpu-hq.pt', map_location='cpu')
 
+logging.info("Loading voice models")
 # Prepare models in RAM
 for i in range(2):
     init = glados.generate_jit(prepare_text(str(i)))
-    init_mel = init['mel_post'].to(device)
+    init_mel = init['mel_post'].to('cpu')
     init_vo = vocoder(init_mel)
+logging.info("Voice models loaded")
+
 
 def tts(text):
     """
@@ -46,7 +43,7 @@ def tts(text):
         tts_output = glados.generate_jit(x)
 
         # Use HiFiGAN as vocoder to make output sound like GLaDOS
-        mel = tts_output['mel_post'].to(device)
+        mel = tts_output['mel_post'].to('cpu')
         audio = vocoder(mel)
         
         # Normalize audio to fit in wav-file
@@ -57,6 +54,6 @@ def tts(text):
         # Write audio to memory file
         # 22,05 kHz sample rate
         byte_io = io.BytesIO(bytes())
-        write(byte_io, 22050, audio)
+        _wavfile.write(byte_io, 22050, audio)
         
         return byte_io
