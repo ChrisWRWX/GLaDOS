@@ -60,5 +60,4 @@ class whisper:
 
         audio_np = _np.array(clip, dtype=_np.float32) / 16000
         result = self.whisper.transcribe(audio_np, fp16=False)
-        logging.info(f"Prompt: {result['text'].strip()}")
         return result['text'].strip()
