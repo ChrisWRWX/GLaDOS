@@ -40,12 +40,14 @@ async def handler(websocket):
             
             logging.info(json.dumps({
                 "id": str(websocket.id),
-                "time": str((time.time() - start_time) * 1000) + "ms",
+                "time": str(round((time.time() - start_time) * 1000, 0)) + "ms",
                 "prompt": prompt
             }))
 
+            start_time = time.time()
             response = chatGPT.query(prompt, conversations[websocket.id])
-
+            logging.info(f'chatGPT response - {str(round((time.time() - start_time) * 1000, 0))}ms')
+            
             all_text = ""
             running_text = ""
             for chunk in response:
@@ -63,7 +65,7 @@ async def handler(websocket):
                     temp = glados.tts(running_text.strip())
                     logging.info(json.dumps({
                         "id": str(websocket.id),
-                        "time": str((time.time() - start_time) * 1000) + "ms",
+                        "time": str(round((time.time() - start_time) * 1000, 0)) + "ms",
                         "response": running_text.strip()
                     }))
                     await connections[websocket.id].send(temp.read())
@@ -75,7 +77,7 @@ async def handler(websocket):
                 temp = glados.tts(running_text.strip())
                 logging.info(json.dumps({
                     "id": str(websocket.id),
-                    "time": str((time.time() - start_time) * 1000) + "ms",
+                    "time": str(round((time.time() - start_time) * 1000, 0)) + "ms",
                     "response": running_text.strip()
                 }))
                 await connections[websocket.id].send(temp.read())
