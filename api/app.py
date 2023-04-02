@@ -10,6 +10,7 @@ import glados
 import os
 import logging
 import json
+import time
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -29,6 +30,7 @@ async def handler(websocket):
         try:
             message = await websocket.recv()
             
+            start_time = time.time()
             if isinstance(message, str):
                 prompt = message
             else:
@@ -36,7 +38,11 @@ async def handler(websocket):
                 audio = BytesIO(message)
                 prompt = whisper.transcribe(audio)
             
-            logging.info(json.dumps({"id": str(websocket.id), "prompt": prompt}))
+            logging.info(json.dumps({
+                "id": str(websocket.id),
+                "time": str((time.time() - start_time) * 1000) + "ms",
+                "prompt": prompt
+            }))
 
             response = chatGPT.query(prompt, conversations[websocket.id])
 
@@ -54,8 +60,13 @@ async def handler(websocket):
                     '.' in running_text or
                     _re.search(r'[a-zA-Z]{2,},', running_text)
                 ):
+                    start_time = time.time()
                     temp = glados.tts(running_text)
-                    logging.info(json.dumps({"id": str(websocket.id), "response": running_text}))
+                    logging.info(json.dumps({
+                        "id": str(websocket.id),
+                        "time": str((time.time() - start_time) * 1000) + "ms",
+                        "response": running_text
+                    }))
                     await connections[websocket.id].send(temp.read())
                     await asyncio.sleep(0)
                     running_text = ""
