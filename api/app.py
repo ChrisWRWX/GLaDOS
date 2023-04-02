@@ -57,23 +57,28 @@ async def handler(websocket):
                     '!' in running_text or
                     '?' in running_text or
                     ' - ' in running_text or
-                    '.' in running_text or
-                    _re.search(r'[a-zA-Z]{2,},', running_text)
+                    '.' in running_text
                 ):
                     start_time = time.time()
-                    temp = glados.tts(running_text)
+                    temp = glados.tts(running_text.strip())
                     logging.info(json.dumps({
                         "id": str(websocket.id),
                         "time": str((time.time() - start_time) * 1000) + "ms",
-                        "response": running_text
+                        "response": running_text.strip()
                     }))
                     await connections[websocket.id].send(temp.read())
                     await asyncio.sleep(0)
                     running_text = ""
 
-            if running_text:
-                logging.info(json.dumps({"id": str(websocket.id), "response": running_text}))
-                await connections[websocket.id].send(running_text)
+            if running_text.strip():
+                start_time = time.time()
+                temp = glados.tts(running_text.strip())
+                logging.info(json.dumps({
+                    "id": str(websocket.id),
+                    "time": str((time.time() - start_time) * 1000) + "ms",
+                    "response": running_text.strip()
+                }))
+                await connections[websocket.id].send(temp.read())
                 await asyncio.sleep(0)
 
             if websocket.id not in conversations:
