@@ -12,6 +12,7 @@ const AudioRecorder = (props) => {
   const audioType = "audio/wav"
   const canvasRef = React.useRef(null);
   const [analyserNode, setAnalyserNode] = React.useState(null);
+  const [userAudioVis, setUserAudioVis] = React.useState('none');
 
 
   React.useEffect(() => {
@@ -19,7 +20,7 @@ const AudioRecorder = (props) => {
   }, [audioQueue])
 
   const audioProps = {
-    width: 200,
+    width: 75,
     height: 50,
     audioType,
     // audioOptions: {sampleRate: 16000},
@@ -31,8 +32,28 @@ const AudioRecorder = (props) => {
     pauseCallback: e => {
     },
     stopCallback: e => {
+      console.log(e)
       props.socket.send(e)
       // props.socket.send('start a conversation')
+    },
+    onRecordCallback: e => {
+    },
+    errorCallback: err => {
+    }
+  };
+
+  const audioProps2 = {
+    width: 75,
+    height: 50,
+    audioType,
+    status,
+    audioSrc,
+    timeslice: 1000, // timeslice（https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/start#Parameters）
+    startCallback: e => {
+    },
+    pauseCallback: e => {
+    },
+    stopCallback: e => {
     },
     onRecordCallback: e => {
     },
@@ -151,37 +172,57 @@ const AudioRecorder = (props) => {
     <>
       <div style={{marginTop: '150px', textAlign: 'center'}}>
         <canvas ref={canvasRef} width={200} height={100}></canvas>
-        <div style={{marginTop:'100px'}}>
-          <button
-            style={{
-              width: '100px',
-              height: '100px',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              border: 'none',
-            }}
-            onTouchStart={() => {
-              setStatus("recording");
-              setMicImage("./mic-32-red.png")
-            }}
-            onTouchEnd={() => {
-              setStatus("inactive")
-              setMicImage("./mic-32-black.png")
-            }}
-            onMouseDown={() => {
-              setStatus("recording");
-              setMicImage("./mic-32-red.png")
-            }}
-            onMouseUp={() => {
-              setStatus("inactive")
-              setMicImage("./mic-32-black.png")
-            }}
-          >
-            <img src={micImage} alt="mic"/>
-          </button>
-        </div>
-        <div style={{display: 'none'}}>
-          <AudioAnalyser {...audioProps} />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: '100px'
+        }}>
+          <div style={{
+            transform: 'rotate(90deg)',
+            display: userAudioVis
+          }}>
+            <AudioAnalyser {...audioProps} />
+          </div>
+          <div>
+            <button
+              style={{
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                border: 'none',
+              }}
+              onTouchStart={() => {
+                setStatus("recording")
+                setUserAudioVis('block')
+                setMicImage("./mic-32-red.png")
+              }}
+              onTouchEnd={() => {
+                setStatus("inactive")
+                setUserAudioVis('none')
+                setMicImage("./mic-32-black.png")
+              }}
+              onMouseDown={() => {
+                setStatus("recording")
+                setUserAudioVis('block')
+                setMicImage("./mic-32-red.png")
+              }}
+              onMouseUp={() => {
+                setStatus("inactive")
+                setUserAudioVis('none')
+                setMicImage("./mic-32-black.png")
+              }}
+            >
+              <img src={micImage} alt="mic"/>
+            </button>
+          </div>
+          <div style={{
+            transform: 'rotate(270deg)',
+            display: userAudioVis
+          }}>
+            <AudioAnalyser {...audioProps2} />
+          </div>
         </div>
         <div>
           <button 
