@@ -1,3 +1,3 @@
 import whisper
 
-whisper = whisper.load_model("small.en")
+whisper = whisper.load_model("base.en")

@@ -42,9 +42,9 @@ class chatGPT:
 
 class whisper:
     def __init__(self):
-        logging.info('Loading whisper model - small.en')
-        self.whisper = _whisper.load_model("small.en")
-        logging.info('Whisper model loaded - small.en')
+        logging.info('Loading whisper model - base.en')
+        self.whisper = _whisper.load_model("base.en")
+        logging.info('Whisper model loaded - base.en')
 
     def transcribe(self, audio):
         """
