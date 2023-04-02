@@ -8,7 +8,7 @@ const AudioRecorder = (props) => {
   const [audioSrc] = React.useState();
   const [audioQueue, setAudioQueue] = React.useState([]);
   const qRef = React.useRef('');
-  const [micImage, setMicImage] = React.useState("./mic-32-black.png")
+  const [micImage, setMicImage] = React.useState("./mic-64-black.svg")
   const audioType = "audio/wav"
   const canvasRef = React.useRef(null);
   const [analyserNode, setAnalyserNode] = React.useState(null);
@@ -196,22 +196,22 @@ const AudioRecorder = (props) => {
               onTouchStart={() => {
                 setStatus("recording")
                 setUserAudioVis('block')
-                setMicImage("./mic-32-red.png")
+                setMicImage("./mic-64-red.svg")
               }}
               onTouchEnd={() => {
                 setStatus("inactive")
                 setUserAudioVis('none')
-                setMicImage("./mic-32-black.png")
+                setMicImage("./mic-64-black.svg")
               }}
               onMouseDown={() => {
                 setStatus("recording")
                 setUserAudioVis('block')
-                setMicImage("./mic-32-red.png")
+                setMicImage("./mic-64-red.svg")
               }}
               onMouseUp={() => {
                 setStatus("inactive")
                 setUserAudioVis('none')
-                setMicImage("./mic-32-black.png")
+                setMicImage("./mic-64-black.svg")
               }}
             >
               <img src={micImage} alt="mic"/>
