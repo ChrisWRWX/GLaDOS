@@ -214,7 +214,13 @@ const AudioRecorder = (props) => {
                 setMicImage("./mic-64-black.svg")
               }}
             >
-              <img src={micImage} alt="mic"/>
+              <img
+                style={{
+                  width: 64
+                }}
+                src={micImage}
+                alt="mic"
+              />
             </button>
           </div>
           <div style={{
@@ -226,10 +232,25 @@ const AudioRecorder = (props) => {
         </div>
         <div>
           <button 
-            style={{textAlign: 'center', marginTop: '50px'}}
-            onClick={() => {props.socket.send('start a conversation')}}
+            class='test'
+            style={{
+              textAlign: 'center',
+              marginTop: '50px',
+              width: 150
+            }}
+            onClick={() => {props.socket.send('Start a conversation')}}
           >
             Start a conversation
+          </button>
+          <button 
+            class='test'
+            style={{
+              textAlign: 'center',
+              width: 150
+            }}
+            onClick={() => {props.socket.send('Ask me an open-ended question')}}
+          >
+            Ask me a question
           </button>
         </div>
       </div>
