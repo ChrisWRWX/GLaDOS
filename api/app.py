@@ -36,7 +36,7 @@ async def handler(websocket):
                 audio = BytesIO(message)
                 prompt = whisper.transcribe(audio)
             
-            logging.info(json.dumps({"id": websocket.id, "prompt": prompt}))
+            logging.info(json.dumps({"id": str(websocket.id), "prompt": prompt}))
 
             response = chatGPT.query(prompt, conversations[websocket.id])
 
@@ -55,13 +55,13 @@ async def handler(websocket):
                     _re.search(r'[a-zA-Z]{2,},', running_text)
                 ):
                     temp = glados.tts(running_text)
-                    logging.info(json.dumps({"id": websocket.id, "response": running_text}))
+                    logging.info(json.dumps({"id": str(websocket.id), "response": running_text}))
                     await connections[websocket.id].send(temp.read())
                     await asyncio.sleep(0)
                     running_text = ""
 
             if running_text:
-                logging.info(json.dumps({"id": websocket.id, "response": running_text}))
+                logging.info(json.dumps({"id": str(websocket.id), "response": running_text}))
                 await connections[websocket.id].send(running_text)
                 await asyncio.sleep(0)
 
