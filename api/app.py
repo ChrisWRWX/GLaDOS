@@ -5,7 +5,6 @@ from openAI import (
     chatGPT as _chatGPT,
     whisper as _whisper
 )
-import re as _re
 import glados
 import os
 import logging
@@ -33,15 +32,17 @@ async def handler(websocket):
             start_time = time.time()
             if isinstance(message, str):
                 prompt = message
+                confidence = 1
             else:
                 # transcribe audio
                 audio = BytesIO(message)
-                prompt = whisper.transcribe(audio)
+                prompt, confidence = whisper.transcribe(audio)
             
             logging.info(json.dumps({
                 "id": str(websocket.id),
-                "time": str(round((time.time() - start_time) * 1000, 0)) + "ms",
-                "prompt": prompt
+                "time": str(int(round((time.time() - start_time) * 1000, 0))) + "ms",
+                "prompt": prompt,
+                "confidence": round(confidence, 3)
             }))
 
             start_time = time.time()

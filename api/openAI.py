@@ -4,6 +4,7 @@ import numpy as _np
 from scipy.io import wavfile as _wavfile
 from scipy import signal as _signal
 import logging
+import math
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -60,4 +61,4 @@ class whisper:
 
         audio_np = _np.array(clip, dtype=_np.float32) / 16000
         result = self.whisper.transcribe(audio_np, fp16=False)
-        return result['text'].strip()
+        return (result['text'].strip(), math.exp(result['segments'][0]['avg_logprob']))
