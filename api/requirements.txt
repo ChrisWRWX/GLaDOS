@@ -1,0 +1,8 @@
+phonemizer
+inflect
+unidecode
+scipy
+openai
+openai-whisper
+numpy
+websockets
